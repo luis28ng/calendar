@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
 
-function App() {
+const events = [
+  { title: 'Meeting', start: new Date() }
+]
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Demo App</h1>
+      <FullCalendar
+        plugins={[dayGridPlugin]}
+        initialView='dayGridMonth'
+        weekends={false}
+        events={events}
+        eventContent={renderEventContent}
+      />
     </div>
-  );
+  )
 }
 
-export default App;
+// a custom render function
+function renderEventContent(eventInfo) {
+  return (
+    <>
+      <b>{eventInfo.timeText}</b>
+      <i>{eventInfo.event.title}</i>
+    </>
+  )
+}
