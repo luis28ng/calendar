@@ -7,6 +7,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
+import { useState } from "react";
 
 // const events = [
 //   { title: 'Meeting', start: new Date() }
@@ -15,8 +16,21 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 
 export default function App() {
 
+  const [events, setEvents] = useState([]);
+
   const handleDateClick = (info) => {
-    alert(info.date)
+    const {start, end} = info;
+    const eventName = prompt('Enter event name: ');
+    if (eventName) {
+      setEvents([
+        events, {
+          start,
+          end,
+          title: eventName,
+        },
+      ]);
+    }
+    // alert(info.date)
     console.log(info.date)
   }
 
@@ -30,12 +44,11 @@ export default function App() {
 
   return (
     <div>
-      <h1>TimeView Calendar</h1>
-      <FullCalendar
+      <div>
+        <h1>TimeView Calendar</h1>
+        <FullCalendar
         plugins={[interactionPlugin, listPlugin, resourceTimelinePlugin, bootstrap5Plugin]}
         initialView='resourceTimelineDay'
-        weekends={false}
-        timeZone='local'
         editable={true}
         headerToolbar={
           {left: 'prev,next',
@@ -52,10 +65,34 @@ export default function App() {
         // events={events}
         // eventContent={renderEventContent}
         selectable={true}
+        // dateClick= {handleDateClick}
+        select={handleDateClick}
+        themeSystem='bootstrap5'
+        nowIndicator={true}
+        events={events}
+        height={'90vh'}
+      />
+      </div>
+      <div>
+        <h1>Week Calendar</h1>
+        <FullCalendar
+        plugins={[interactionPlugin, listPlugin, timeGridPlugin, dayGridPlugin, bootstrap5Plugin]}
+        initialView='timeGridWeek'
+        selectable={true}
         dateClick= {handleDateClick}
         themeSystem='bootstrap5'
         nowIndicator={true}
-      />
+        editable={true}
+        headerToolbar={
+          {left: 'prev,next',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'}
+        }
+        events={events}
+        select={handleDateClick}
+        height={'90vh'}
+        />
+      </div>
     </div>
   )
 }
